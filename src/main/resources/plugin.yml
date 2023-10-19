@@ -1,0 +1,4 @@
+name: TeleportSystem
+version: '${project.version}'
+main: de.kevrecraft.teleportsystem.TeleportSystem
+api-version: '1.20'
