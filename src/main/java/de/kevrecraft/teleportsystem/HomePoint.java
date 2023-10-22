@@ -12,7 +12,7 @@ import java.util.Set;
 public class HomePoint {
 
     private final File file;
-    private YamlConfiguration config;
+    private YamlConfiguration config = new YamlConfiguration();
 
     public HomePoint(Player player) {
         File folder = new File(TeleportSystem.getDataFolde().getAbsolutePath(), "HomePoints");
@@ -22,10 +22,9 @@ public class HomePoint {
 
         this.file = new File(folder.getAbsolutePath(), player.getUniqueId().toString());
         try {
-            if(!this.file.exists()) {
-                this.file.createNewFile();
+            if(this.file.exists()) {
+                this.config.load(this.file);
             }
-            this.config.load(this.file);
         } catch (IOException | InvalidConfigurationException e) {
             throw new RuntimeException(e);
         }
