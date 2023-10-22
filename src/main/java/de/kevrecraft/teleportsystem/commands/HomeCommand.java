@@ -1,16 +1,22 @@
 package de.kevrecraft.teleportsystem.commands;
 
+import de.kevrecraft.teleportsystem.HomeManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(help(sender, args))
+            return true;
+        else if (set(sender, args))
+            return true;
 
-
-        return false;
+        sender.sendMessage(ChatColor.RED + "Fehler: Benutzte /home help für eine hilfestellung!");
+        return true;
     }
 
     public boolean set(CommandSender sender, String[] args) {
@@ -18,12 +24,17 @@ public class HomeCommand implements CommandExecutor {
             return false;
         if(!args[0].equalsIgnoreCase("set"))
             return false;
+        if(!(sender instanceof Player))
+            return false;
+        Player player = (Player) sender;
 
         if(args.length == 1) {
-            // TODO: Implemets set Home as "home";
+            HomeManager.get(player).set("home", player.getLocation());
+            player.sendMessage(ChatColor.GREEN + "Dein Home point wurde gesetzt!");
             return true;
         }
-        // TODO: Implemets set Home as args[1];
+        HomeManager.get(player).set(args[1], player.getLocation());
+        player.sendMessage(ChatColor.GREEN + "Dein Home point wurde gesetzt!");
 
 
         return true;

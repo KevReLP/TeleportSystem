@@ -8,18 +8,20 @@ import java.io.File;
 public final class TeleportSystem extends JavaPlugin {
 
     private static TeleportSystem plugin;
+    private static HomeManager homeManager;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
         plugin = this;
+        homeManager = new HomeManager();
+        getServer().getPluginManager().registerEvents(homeManager, this);
 
         this.getCommand("home").setExecutor(new HomeCommand());
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        homeManager.onDisable();
     }
 
     public static File getDataFolde() {
