@@ -13,8 +13,11 @@ public class TeleportPoint {
     }
 
     public void teleport(Entity entity) {
-        if(!entity.getVehicle().isEmpty()) {
-            entity.getVehicle().teleport(this.location);
+        if(entity.getVehicle() != null) {
+            Entity vehicle = entity.getVehicle();
+            vehicle.eject();
+            vehicle.teleport(this.location);
+            vehicle.setPassenger(entity);
         } else {
             entity.teleport(this.location);
         }

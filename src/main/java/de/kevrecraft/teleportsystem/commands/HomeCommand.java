@@ -1,6 +1,7 @@
 package de.kevrecraft.teleportsystem.commands;
 
 import de.kevrecraft.teleportsystem.HomeManager;
+import de.kevrecraft.teleportsystem.HomePoint;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,8 +15,49 @@ public class HomeCommand implements CommandExecutor {
             return true;
         else if (set(sender, args))
             return true;
+        if(teleport(sender, args))
+            return true;
+        if(teleportCustom(sender, args))
+            return true;
 
         sender.sendMessage(ChatColor.RED + "Fehler: Benutzte /home help für eine hilfestellung!");
+        return true;
+    }
+
+    public boolean teleportCustom(CommandSender sender, String[] args) {
+        if(args.length != 2)
+            return false;
+        if(!args[0].equalsIgnoreCase("tp"))
+            return false;
+        Player player = (Player) sender;
+        if(player == null)
+            return false;
+        HomePoint homePoint = HomeManager.get(player);
+        if(!homePoint.exist(args[1])) {
+            sender.sendMessage(ChatColor.RED + "Dein home " + args[1] + " wurde noch nicht gesetzt!");
+            return true;
+        }
+
+        homePoint.get(args[1]).teleport(player);
+        player.sendMessage(ChatColor.GREEN + "Du wurdest nach Hause " + args[1] + " teleportiert!");
+        return true;
+    }
+
+    public boolean teleport(CommandSender sender, String[] args) {
+        if(args.length != 0)
+            return false;
+        Player player = (Player) sender;
+        if(player == null)
+            return false;
+        HomePoint homePoint = HomeManager.get(player);
+        if(!homePoint.exist("home")) {
+            sender.sendMessage(ChatColor.RED + "Dein home wurde noch nicht gesetzt!");
+            return true;
+        }
+
+
+        homePoint.get("home").teleport(player);
+        player.sendMessage(ChatColor.GREEN + "Du wurdest nach Hause teleportiert!");
         return true;
     }
 
@@ -55,6 +97,7 @@ public class HomeCommand implements CommandExecutor {
         sender.sendMessage(commandColor + "/home help " + arrow + color + " Gibt dir eine Hilfestellung zu dem Befehl.");
         sender.sendMessage(commandColor + "/home set" + arrow + color + " Setzt ein Homepunkt mit dem Namen home.");
         sender.sendMessage(commandColor + "/home set <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+        sender.sendMessage(commandColor + "/home tp <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
 
         return true;
     }
