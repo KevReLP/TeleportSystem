@@ -1,6 +1,5 @@
 package de.kevrecraft.teleportsystem.tabcompleters;
 
-import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
 import de.kevrecraft.teleportsystem.managers.HomeManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
