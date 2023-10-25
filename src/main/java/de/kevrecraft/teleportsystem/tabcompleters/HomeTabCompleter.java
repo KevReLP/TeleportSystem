@@ -25,6 +25,8 @@ public class HomeTabCompleter implements TabCompleter {
                 return getHomes((Player) sender);
             } else if(args[0].equalsIgnoreCase("tp")) {
                 return getHomes((Player) sender);
+            } else if(args[0].equalsIgnoreCase("remove")) {
+                return getHomes((Player) sender);
             }
         }
 
@@ -39,6 +41,7 @@ public class HomeTabCompleter implements TabCompleter {
         ArrayList<String> list = new ArrayList<>();
         list.add("help");
         list.add("set");
+        list.add("remove");
         list.add("tp");
         return list;
     }

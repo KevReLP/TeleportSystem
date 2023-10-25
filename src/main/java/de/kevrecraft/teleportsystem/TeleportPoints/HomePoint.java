@@ -43,6 +43,10 @@ public class HomePoint {
         this.config.set(name, location);
     }
 
+    public void remove(String name) {
+        this.config.set(name, null);
+    }
+
     public Set<String> getHomes() {
         return this.config.getKeys(false);
     }
