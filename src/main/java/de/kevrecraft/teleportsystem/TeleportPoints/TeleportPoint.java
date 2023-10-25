@@ -1,4 +1,4 @@
-package de.kevrecraft.teleportsystem;
+package de.kevrecraft.teleportsystem.TeleportPoints;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

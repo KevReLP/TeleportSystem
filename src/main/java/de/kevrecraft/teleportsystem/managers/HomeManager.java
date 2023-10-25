@@ -1,5 +1,6 @@
-package de.kevrecraft.teleportsystem;
+package de.kevrecraft.teleportsystem.managers;
 
+import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

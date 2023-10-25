@@ -1,5 +1,6 @@
-package de.kevrecraft.teleportsystem;
+package de.kevrecraft.teleportsystem.TeleportPoints;
 
+import de.kevrecraft.teleportsystem.TeleportSystem;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;

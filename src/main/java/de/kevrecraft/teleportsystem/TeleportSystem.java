@@ -1,6 +1,8 @@
 package de.kevrecraft.teleportsystem;
 
 import de.kevrecraft.teleportsystem.commands.HomeCommand;
+import de.kevrecraft.teleportsystem.managers.HomeManager;
+import de.kevrecraft.teleportsystem.tabcompleters.HomeTabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -17,6 +19,7 @@ public final class TeleportSystem extends JavaPlugin {
         getServer().getPluginManager().registerEvents(homeManager, this);
 
         this.getCommand("home").setExecutor(new HomeCommand());
+        this.getCommand("home").setTabCompleter(new HomeTabCompleter());
     }
 
     @Override

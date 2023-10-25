@@ -1,7 +1,7 @@
 package de.kevrecraft.teleportsystem.commands;
 
-import de.kevrecraft.teleportsystem.HomeManager;
-import de.kevrecraft.teleportsystem.HomePoint;
+import de.kevrecraft.teleportsystem.managers.HomeManager;
+import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,6 +11,12 @@ import org.bukkit.entity.Player;
 public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "Das kann nur ein Spieler tun!");
+            return true;
+        }
+
+
         if(help(sender, args))
             return true;
         else if (set(sender, args))
