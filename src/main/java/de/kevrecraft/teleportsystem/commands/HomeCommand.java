@@ -3,6 +3,7 @@ package de.kevrecraft.teleportsystem.commands;
 import de.kevrecraft.teleportsystem.TeleportSystem;
 import de.kevrecraft.teleportsystem.managers.HomeManager;
 import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,8 +29,37 @@ public class HomeCommand implements CommandExecutor {
             return true;
         if(remove(sender, args))
             return true;
+        if(teleportCustomAdmin(sender, args))
+            return true;
+        if (setAdmin(sender, args))
+            return true;
+        if(removeAdmin(sender, args))
 
         sender.sendMessage(ChatColor.RED + "Fehler: Benutzte /home help für eine hilfestellung!");
+        return true;
+    }
+
+    public boolean teleportCustomAdmin(CommandSender sender, String[] args) {
+        if(!sender.hasPermission("home.admin"))
+            return false;
+        if(args.length != 3)
+            return false;
+        if(!args[0].equalsIgnoreCase("tp"))
+            return false;
+        Player target = Bukkit.getPlayer(args[1]);
+        if(target == null) {
+            sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
+            sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
+            return true;
+        }
+        HomePoint homePoint = HomeManager.get(target);
+        if(!homePoint.exist(args[2])) {
+            sender.sendMessage(ChatColor.RED + "Das home " + args[2] + " von " + args[1] + " wurde noch nicht gesetzt!");
+            return true;
+        }
+
+        homePoint.get(args[2]).teleport((Player) sender);
+        sender.sendMessage(ChatColor.GREEN + "Du wurdest zum Home " + args[2] + " von " + args[1] + " teleportiert!");
         return true;
     }
 
@@ -70,6 +100,34 @@ public class HomeCommand implements CommandExecutor {
         return true;
     }
 
+    public boolean setAdmin(CommandSender sender, String[] args) {
+        if(!sender.hasPermission("home.admin"))
+            return false;
+        if(args.length != 3)
+            return false;
+        if(!args[0].equalsIgnoreCase("set"))
+            return false;
+        Player target = Bukkit.getPlayer(args[1]);
+        if(target == null) {
+            sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
+            sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
+            return true;
+        }
+
+
+        if(HomeManager.get(target).getHomes().size() >= TeleportSystem.getConfiguration().getInt("home.max")) {
+            if(!HomeManager.get(target).exist(args[2])) {
+                sender.sendMessage(ChatColor.RED + "Die maximale anzahl an Homes von " + args[1] + " ist bereits erreicht!");
+                return true;
+            }
+        }
+
+
+        HomeManager.get(target).set(args[2], ((Player) sender).getLocation());
+        sender.sendMessage(ChatColor.GREEN + "Das Home " + args[2] + " von " + args[1] +" wurde gesetzt!");
+        return true;
+    }
+
     public boolean set(CommandSender sender, String[] args) {
         if(args.length != 1 && args.length != 2)
             return false;
@@ -96,6 +154,30 @@ public class HomeCommand implements CommandExecutor {
 
         HomeManager.get(player).set(homeName, player.getLocation());
         player.sendMessage(ChatColor.GREEN + "Dein Home point wurde gesetzt!");
+        return true;
+    }
+
+    public boolean removeAdmin(CommandSender sender, String[] args) {
+        if(!sender.hasPermission("home.admin"))
+            return false;
+        if(args.length != 3)
+            return false;
+        if(!args[0].equalsIgnoreCase("remove"))
+            return false;
+        Player target = Bukkit.getPlayer(args[1]);
+        if(target == null) {
+            sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
+            sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
+            return true;
+        }
+
+        if(!HomeManager.get(target).exist(args[2])) {
+            sender.sendMessage(ChatColor.YELLOW + "Das Home " + args[2] + " von " + args[1] +" kann nicht gelöscht werden, da es nicht existiert!");
+            return true;
+        }
+
+        HomeManager.get(target).remove(args[2]);
+        sender.sendMessage(ChatColor.GREEN + "Das Home " + args[2] + " von " + args[1] + " wurde gelöscht!");
         return true;
     }
 
@@ -135,6 +217,12 @@ public class HomeCommand implements CommandExecutor {
         sender.sendMessage(commandColor + "/home set <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
         sender.sendMessage(commandColor + "/home remove <name>" + arrow + color + " Löscht ein Homepunkt mit dem Angegebenen Namen.");
         sender.sendMessage(commandColor + "/home tp <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+
+        if(sender.hasPermission("home.admin")) {
+            sender.sendMessage(commandColor + "/home tp <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+            sender.sendMessage(commandColor + "/home set <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+            sender.sendMessage(commandColor + "/home remove <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+        }
 
         return true;
     }
