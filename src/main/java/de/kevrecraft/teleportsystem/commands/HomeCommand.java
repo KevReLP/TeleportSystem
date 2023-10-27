@@ -5,6 +5,7 @@ import de.kevrecraft.teleportsystem.managers.HomeManager;
 import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,12 +45,12 @@ public class HomeCommand implements CommandExecutor {
             return false;
         if(args.length != 3)
             return false;
-        if(!args[0].equalsIgnoreCase("tp"))
+        if(!args[0].equalsIgnoreCase("tp_other"))
             return false;
-        Player target = Bukkit.getPlayer(args[1]);
-        if(target == null) {
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        if(target.hasPlayedBefore()) {
             sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
-            sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
+            sender.sendMessage(ChatColor.YELLOW + "Hat der Spieler " + args[1] + " bereits einmal gespielt?");
             return true;
         }
         HomePoint homePoint = HomeManager.get(target);
@@ -105,12 +106,12 @@ public class HomeCommand implements CommandExecutor {
             return false;
         if(args.length != 3)
             return false;
-        if(!args[0].equalsIgnoreCase("set"))
+        if(!args[0].equalsIgnoreCase("set_other"))
             return false;
-        Player target = Bukkit.getPlayer(args[1]);
-        if(target == null) {
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        if(target.hasPlayedBefore()) {
             sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
-            sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
+            sender.sendMessage(ChatColor.YELLOW + "Hat der Spieler " + args[1] + " bereits auf dem Server gespielt?");
             return true;
         }
 
@@ -123,7 +124,9 @@ public class HomeCommand implements CommandExecutor {
         }
 
 
-        HomeManager.get(target).set(args[2], ((Player) sender).getLocation());
+        HomePoint homePoint = HomeManager.get(target);
+        homePoint.set(args[2], ((Player) sender).getLocation());
+        homePoint.save();
         sender.sendMessage(ChatColor.GREEN + "Das Home " + args[2] + " von " + args[1] +" wurde gesetzt!");
         return true;
     }
@@ -162,10 +165,10 @@ public class HomeCommand implements CommandExecutor {
             return false;
         if(args.length != 3)
             return false;
-        if(!args[0].equalsIgnoreCase("remove"))
+        if(!args[0].equalsIgnoreCase("remove_other"))
             return false;
-        Player target = Bukkit.getPlayer(args[1]);
-        if(target == null) {
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        if(target.hasPlayedBefore()) {
             sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
             sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
             return true;
@@ -176,7 +179,9 @@ public class HomeCommand implements CommandExecutor {
             return true;
         }
 
-        HomeManager.get(target).remove(args[2]);
+        HomePoint homePoint = HomeManager.get(target);
+        homePoint.remove(args[2]);
+        homePoint.save();
         sender.sendMessage(ChatColor.GREEN + "Das Home " + args[2] + " von " + args[1] + " wurde gelöscht!");
         return true;
     }
@@ -219,9 +224,9 @@ public class HomeCommand implements CommandExecutor {
         sender.sendMessage(commandColor + "/home tp <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
 
         if(sender.hasPermission("home.admin")) {
-            sender.sendMessage(commandColor + "/home tp <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
-            sender.sendMessage(commandColor + "/home set <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
-            sender.sendMessage(commandColor + "/home remove <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+            sender.sendMessage(commandColor + "/home tp_other <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+            sender.sendMessage(commandColor + "/home set_other <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
+            sender.sendMessage(commandColor + "/home remove_other <player> <name>" + arrow + color + " Setzt ein Homepunkt mit dem Angegebenen Namen.");
         }
 
         return true;

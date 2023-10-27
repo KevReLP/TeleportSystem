@@ -2,6 +2,7 @@ package de.kevrecraft.teleportsystem.TeleportPoints;
 
 import de.kevrecraft.teleportsystem.TeleportSystem;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -16,6 +17,22 @@ public class HomePoint {
     private YamlConfiguration config = new YamlConfiguration();
 
     public HomePoint(Player player) {
+        File folder = new File(TeleportSystem.getDataFolde().getAbsolutePath(), "HomePoints");
+        if(!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        this.file = new File(folder.getAbsolutePath(), player.getUniqueId().toString());
+        try {
+            if(this.file.exists()) {
+                this.config.load(this.file);
+            }
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public HomePoint(OfflinePlayer player) {
         File folder = new File(TeleportSystem.getDataFolde().getAbsolutePath(), "HomePoints");
         if(!folder.exists()) {
             folder.mkdirs();

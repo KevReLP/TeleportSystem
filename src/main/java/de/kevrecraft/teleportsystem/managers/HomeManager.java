@@ -2,6 +2,7 @@ package de.kevrecraft.teleportsystem.managers;
 
 import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +47,10 @@ public class HomeManager implements Listener {
 
     public static HomePoint get(Player player) {
         return homes.get(player);
+    }
+
+    public static HomePoint get(OfflinePlayer player) {
+        return new HomePoint(player);
     }
 
 }
