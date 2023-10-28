@@ -35,6 +35,7 @@ public class HomeCommand implements CommandExecutor {
         if (setAdmin(sender, args))
             return true;
         if(removeAdmin(sender, args))
+            return true;
 
         sender.sendMessage(ChatColor.RED + "Fehler: Benutzte /home help für eine hilfestellung!");
         return true;
@@ -48,7 +49,7 @@ public class HomeCommand implements CommandExecutor {
         if(!args[0].equalsIgnoreCase("tp_other"))
             return false;
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-        if(target.hasPlayedBefore()) {
+        if(!target.hasPlayedBefore()) {
             sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
             sender.sendMessage(ChatColor.YELLOW + "Hat der Spieler " + args[1] + " bereits einmal gespielt?");
             return true;
@@ -109,7 +110,7 @@ public class HomeCommand implements CommandExecutor {
         if(!args[0].equalsIgnoreCase("set_other"))
             return false;
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-        if(target.hasPlayedBefore()) {
+        if(!target.hasPlayedBefore()) {
             sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
             sender.sendMessage(ChatColor.YELLOW + "Hat der Spieler " + args[1] + " bereits auf dem Server gespielt?");
             return true;
@@ -168,7 +169,7 @@ public class HomeCommand implements CommandExecutor {
         if(!args[0].equalsIgnoreCase("remove_other"))
             return false;
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-        if(target.hasPlayedBefore()) {
+        if(!target.hasPlayedBefore()) {
             sender.sendMessage(ChatColor.RED + "Der eingegebene Spieler " + args[1] + " konnten nicht gefunden werden!");
             sender.sendMessage(ChatColor.YELLOW + "Ist der Spieler " + args[1] + " Online?");
             return true;
