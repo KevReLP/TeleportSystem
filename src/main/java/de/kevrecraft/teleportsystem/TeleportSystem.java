@@ -19,7 +19,7 @@ public final class TeleportSystem extends JavaPlugin {
         saveDefaultConfig();
         plugin = this;
         configuration = getConfig();
-        homeManager = new HomeManager();
+        homeManager = new HomeManager(this);
         getServer().getPluginManager().registerEvents(homeManager, this);
 
         this.getCommand("home").setExecutor(new HomeCommand());

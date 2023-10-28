@@ -1,6 +1,7 @@
 package de.kevrecraft.teleportsystem.managers;
 
 import de.kevrecraft.teleportsystem.TeleportPoints.HomePoint;
+import de.kevrecraft.teleportsystem.TeleportSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 public class HomeManager implements Listener {
 
     private static final HashMap<Player, HomePoint> homes = new HashMap<>();
+    private static TeleportSystem plugin;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -24,7 +26,8 @@ public class HomeManager implements Listener {
         save(event.getPlayer());
     }
 
-    public HomeManager() {
+    public HomeManager(TeleportSystem pl) {
+        plugin = pl;
         for(Player player : Bukkit.getOnlinePlayers()) {
             load(player);
         }
@@ -37,12 +40,22 @@ public class HomeManager implements Listener {
     }
 
     private static void load(Player player) {
-        homes.put(player, new HomePoint(player));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                homes.put(player, new HomePoint(player));
+            }
+        });
     }
 
     private static void save(Player player) {
-        homes.get(player).save();
-        homes.remove(player);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                homes.get(player).save();
+                homes.remove(player);
+            }
+        });
     }
 
     public static HomePoint get(Player player) {
