@@ -22,7 +22,7 @@ public final class TeleportSystem extends JavaPlugin {
         homeManager = new HomeManager(this);
         getServer().getPluginManager().registerEvents(homeManager, this);
 
-        this.getCommand("home").setExecutor(new HomeCommand());
+        this.getCommand("home").setExecutor(new HomeCommand(this));
         this.getCommand("home").setTabCompleter(new HomeTabCompleter());
     }
 

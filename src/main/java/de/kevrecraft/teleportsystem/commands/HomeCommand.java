@@ -12,32 +12,44 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class HomeCommand implements CommandExecutor {
+
+    private TeleportSystem plugin;
+
+    public HomeCommand(TeleportSystem pl) {
+        plugin = pl;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Das kann nur ein Spieler tun!");
-            return true;
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                if(!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.RED + "Das kann nur ein Spieler tun!");
+                    return;
+                }
 
 
-        if(help(sender, args))
-            return true;
-        else if (set(sender, args))
-            return true;
-        if(teleport(sender, args))
-            return true;
-        if(teleportCustom(sender, args))
-            return true;
-        if(remove(sender, args))
-            return true;
-        if(teleportCustomAdmin(sender, args))
-            return true;
-        if (setAdmin(sender, args))
-            return true;
-        if(removeAdmin(sender, args))
-            return true;
+                if(help(sender, args))
+                    return;
+                if (set(sender, args))
+                    return;
+                if(teleport(sender, args))
+                    return;
+                if(teleportCustom(sender, args))
+                    return;
+                if(remove(sender, args))
+                    return;
+                if(teleportCustomAdmin(sender, args))
+                    return;
+                if (setAdmin(sender, args))
+                    return;
+                if(removeAdmin(sender, args))
+                    return;
 
-        sender.sendMessage(ChatColor.RED + "Fehler: Benutzte /home help für eine hilfestellung!");
+                sender.sendMessage(ChatColor.RED + "Fehler: Benutzte /home help für eine hilfestellung!");
+            }
+        });
         return true;
     }
 
@@ -60,7 +72,7 @@ public class HomeCommand implements CommandExecutor {
             return true;
         }
 
-        homePoint.get(args[2]).teleport((Player) sender);
+        homePoint.get(args[2]).teleport((Player) sender, plugin);
         sender.sendMessage(ChatColor.GREEN + "Du wurdest zum Home " + args[2] + " von " + args[1] + " teleportiert!");
         return true;
     }
@@ -79,7 +91,7 @@ public class HomeCommand implements CommandExecutor {
             return true;
         }
 
-        homePoint.get(args[1]).teleport(player);
+        homePoint.get(args[1]).teleport(player, plugin);
         player.sendMessage(ChatColor.GREEN + "Du wurdest nach Hause " + args[1] + " teleportiert!");
         return true;
     }
@@ -97,7 +109,7 @@ public class HomeCommand implements CommandExecutor {
         }
 
 
-        homePoint.get("home").teleport(player);
+        homePoint.get("home").teleport(player, plugin);
         player.sendMessage(ChatColor.GREEN + "Du wurdest nach Hause teleportiert!");
         return true;
     }
