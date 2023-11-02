@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class WarpCommand implements CommandExecutor {
 
-    private static final String adminPermission = "warp.admin";
+    public static final String adminPermission = "warp.admin";
 
     private TeleportSystem plugin;
 

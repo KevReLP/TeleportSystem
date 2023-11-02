@@ -10,6 +10,8 @@ import org.bukkit.entity.Entity;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class WarpManager {
 
@@ -35,16 +37,11 @@ public class WarpManager {
     }
 
     public void onDisable() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    config.save(file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static boolean exits(String name) {
@@ -68,6 +65,10 @@ public class WarpManager {
     public static void teleport(String name, Entity entity) {
         if(exits(name))
             getTeleportPoint(name).teleport(entity, plugin);
+    }
+
+    public static Set<String> getWarpsList() {
+        return config.getKeys(false);
     }
 
 }

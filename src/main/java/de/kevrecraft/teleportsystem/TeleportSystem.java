@@ -5,6 +5,7 @@ import de.kevrecraft.teleportsystem.commands.WarpCommand;
 import de.kevrecraft.teleportsystem.managers.HomeManager;
 import de.kevrecraft.teleportsystem.managers.WarpManager;
 import de.kevrecraft.teleportsystem.tabcompleters.HomeTabCompleter;
+import de.kevrecraft.teleportsystem.tabcompleters.WarpsTabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,7 @@ public final class TeleportSystem extends JavaPlugin {
         this.getCommand("home").setTabCompleter(new HomeTabCompleter());
 
         this.getCommand("warp").setExecutor(new WarpCommand(this));
+        this.getCommand("warp").setTabCompleter(new WarpsTabCompleter());
     }
 
     @Override
