@@ -36,10 +36,31 @@ public class WarpCommand implements CommandExecutor {
                         return;
                     }
                     if(WarpManager.exits(args[0])) {
-                        warp(sender, args);
+                        warp(sender, args[0]);
+                        return;
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "Der eingegebene Warppunkt " + args[0] + " existiert nicht!");
                         return;
                     }
 
+                }
+
+                if (args.length == 2) {
+                    if(sender.hasPermission(adminPermission)) {
+                        if(args[0].equalsIgnoreCase("set")) {
+                            set(sender, args[1]);
+                            return;
+                        }
+                        if (args[0].equalsIgnoreCase("remove")) {
+                            if(WarpManager.exits(args[1])) {
+                                remove(sender, args[1]);
+                                return;
+                            } else {
+                                sender.sendMessage(ChatColor.YELLOW + "Der Warppunkt " + args[1] + " existiert nicht!");
+                                return;
+                            }
+                        }
+                    }
                 }
 
                 sender.sendMessage(ChatColor.RED + "Fehler: Benutze /warp help um eine Hilfe zu erhalten!");
@@ -49,10 +70,20 @@ public class WarpCommand implements CommandExecutor {
         return true;
     }
 
-    private void warp(CommandSender sender, String[] args) {
+    private void set(CommandSender sender, String name) {
+        WarpManager.set(name, ((Player) sender).getLocation());
+        sender.sendMessage(ChatColor.GREEN + "Du hast den Warppunkt " + name + " erfolgreich gesetzt!");
+    }
+
+    private void remove(CommandSender sender, String name) {
+        WarpManager.set(name, null);
+        sender.sendMessage(ChatColor.GREEN + "Du hast den Warppunkt " + name + " gelöscht!");
+    }
+
+    private void warp(CommandSender sender, String name) {
         Entity entity = (Entity) sender;
-        WarpManager.teleport(args[0], entity);
-        sender.sendMessage(ChatColor.GREEN + "Du wurdest zu " + args[0] + " teleportiert!");
+        WarpManager.teleport(name, entity);
+        sender.sendMessage(ChatColor.GREEN + "Du wurdest zu " + name + " teleportiert!");
     }
 
     private void sendHelp(CommandSender sender) {
@@ -65,8 +96,7 @@ public class WarpCommand implements CommandExecutor {
 
         if(sender.hasPermission(adminPermission)) {
             sender.sendMessage(commandColor + "/warp set <name>" +  arrow + color +" Setzt einen Warppunkt mit dem eingegebenen Name.");
-            sender.sendMessage(commandColor + "/warp remove <name>" +  arrow + color +" Setzt einen Warppunkt mit dem eingegebenen Name.");
+            sender.sendMessage(commandColor + "/warp remove <name>" +  arrow + color +" Löscht einen Warppunkt mit dem eingegebenen Name.");
         }
     }
-
 }
