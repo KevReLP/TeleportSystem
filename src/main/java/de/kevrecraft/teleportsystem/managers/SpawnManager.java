@@ -1,8 +1,10 @@
 package de.kevrecraft.teleportsystem.managers;
 
+import de.kevrecraft.teleportsystem.ServerProperties;
 import de.kevrecraft.teleportsystem.TeleportPoints.TeleportPoint;
 import de.kevrecraft.teleportsystem.TeleportSystem;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -46,8 +48,7 @@ public class SpawnManager implements Listener {
                     }
                 }
                 if(!config.contains(defaultSpawnName)) {
-                    // TODO: load world name from ServerPropertis...
-                    config.set(defaultSpawnName, Bukkit.getWorld("world").getSpawnLocation());
+                    config.set(defaultSpawnName, Bukkit.getWorld(ServerProperties.get(ServerProperties.ServerPropertieType.worldname)).getSpawnLocation());
                 }
             }
         });
@@ -68,6 +69,10 @@ public class SpawnManager implements Listener {
             }
         }
         return new TeleportPoint(config.getLocation(defaultSpawnName));
+    }
+
+    public static void setSpawn(String name, Location location) {
+        config.set(name, location);
     }
 
 }

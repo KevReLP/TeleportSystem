@@ -8,3 +8,5 @@ commands:
     description: Ein einfacher /home Befehl!
   warp:
     description: Ein einfacher /warp Befehl!
+  spawn:
+    description: Ein einfacher /spawn Befehl!

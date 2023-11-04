@@ -1,6 +1,7 @@
 package de.kevrecraft.teleportsystem;
 
 import de.kevrecraft.teleportsystem.commands.HomeCommand;
+import de.kevrecraft.teleportsystem.commands.SpawnCommand;
 import de.kevrecraft.teleportsystem.commands.WarpCommand;
 import de.kevrecraft.teleportsystem.managers.HomeManager;
 import de.kevrecraft.teleportsystem.managers.SpawnManager;
@@ -36,6 +37,8 @@ public final class TeleportSystem extends JavaPlugin {
 
         this.getCommand("warp").setExecutor(new WarpCommand(this));
         this.getCommand("warp").setTabCompleter(new WarpsTabCompleter());
+
+        this.getCommand("spawn").setExecutor(new SpawnCommand(this));
     }
 
     @Override
