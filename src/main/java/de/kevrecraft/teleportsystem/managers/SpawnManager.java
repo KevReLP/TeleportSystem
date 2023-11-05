@@ -71,6 +71,16 @@ public class SpawnManager implements Listener {
         return new TeleportPoint(config.getLocation(defaultSpawnName));
     }
 
+    public static boolean exists(String name) {
+        return config.contains(name);
+    }
+
+    public static TeleportPoint getSpawn(String name) {
+        if(exists(name))
+            return new TeleportPoint(config.getLocation(name));
+        return null;
+    }
+
     public static void setSpawn(String name, Location location) {
         config.set(name, location);
     }
