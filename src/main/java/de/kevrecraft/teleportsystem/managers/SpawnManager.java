@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class SpawnManager implements Listener {
 
@@ -24,7 +26,13 @@ public class SpawnManager implements Listener {
     private static final String defaultSpawnName = "spawn";
 
     @EventHandler
+    public void onPlayerSpawn(PlayerRespawnEvent event) {
+        getSpawn(event.getPlayer()).teleport(event.getPlayer(), plugin);
+    }
+
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().setBedSpawnLocation(getSpawn(event.getPlayer()).getLocation(), true);
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
@@ -79,6 +87,10 @@ public class SpawnManager implements Listener {
         if(exists(name))
             return new TeleportPoint(config.getLocation(name));
         return null;
+    }
+
+    public static Set<String> getNames() {
+        return config.getKeys(false);
     }
 
     public static void setSpawn(String name, Location location) {
